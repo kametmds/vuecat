@@ -1,0 +1,63 @@
+body {
+  background-color: azure;
+  text-align: center;
+  padding-top: 10%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+ul, ol {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0;
+}
+li {
+  width: 100%;
+  padding: 4px;
+  text-align: left;
+}
+button {
+  background-color: rgb(238, 108, 108);
+  color: aliceblue;
+  border-radius: 0;
+  min-width: 30px;
+  padding: 4px 10px;
+}
+
+.v-enter-active, .v-leave-active {
+  transition: opacity 1s;
+}
+.v-enter, .v-leave-to {
+  opacity: 0;
+}
+.item {
+  padding: 4px 8px;
+  transition: background-color 0.4s;
+}
+.is-active {
+  background: #ffeaea;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+@keyframes cloak-in {
+  0% {
+    opacity: 0;
+  }
+}
+
+#cloak {
+  animation: cloak-in 1s;
+}
+
+#cloak[v-cloak] {
+  opacity: 0;
+}
+
+.preview {
+  width: 200px;
+  height: auto;
+}

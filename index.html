@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Vue.js App</title>
+  <link href="main.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <p>{{ message }}</p>
+  </div>
+  <div id=ol>
+    <ol>
+      <li v-for="item in list">{{ item }}</li>
+    </ol>
+  </div>
+  <div id="btn">
+    <button v-on:click="handleClick">Click!</button>
+  </div>
+  <div id="msg">
+    <input v-model="message">
+    <p>{{message}}</p>
+  </div>
+  <div id="chg">
+    <button v-on:click="show=!show">切り替え</button>
+    <p v-if="show">Hello Vue.js!!</p>
+  </div>
+  <div id="anichg">
+    <button v-on:click="show=!show">アニメ切替</button>
+    <transition>
+      <p v-if="show">Hello Animation!!</p>
+    </transition>
+  </div>
+  <!-- ーーーーーーーーーーーーーーーCH2 データの登録と更新ーーーーーーーーーーーーーーー -->
+  <div id="obj">
+    <p>{{ message.value }}</p>
+    <p>{{ message.value.length }}</p>
+    <p>{{ list[2] }}</p>
+    <p>{{ list[num] }}</p>
+    <p>{{ 1 + 100 }}</p>
+    <p>{{ message.value.length >= 10 ? '10以上' : '10未満' }}</p>
+  </div>
+
+  <div id="sch">
+  </div>
+  <div id="click">
+    <p>{{ count }}回クリックしたよ！！</p>
+    <button v-on:click="increment">カウントを増やす</button>
+  </div>
+  <div id="sta">
+    <p>{{ state }}</p>
+  </div>
+  <!-- クラスとスタイルのデータバインディング2 -->
+  <div id="bind">
+    <button v-on:click="isActive=!isActive">isActiveを切り替える</button>
+    <p v-bind:class="{ child: isChild, 'is-active': isActive }" class="item">動的なクラス</p>
+    <p v-bind:style="{ color: textColor, backgroundColor: bgColor }" class="item">動的なスタイル</p>
+    <p class="child" v-bind:class="{ 'is-active': isActive }">Text</p>
+    <p style="color:blue" v-bind:style="{ color: textColor }">Text</p>
+    <!-- <p v-bind:class="[isActive ? 'active' : 'normal', otherClass]">Text</p> -->
+  </div>
+  <div id="bind2"></div>
+    <p v-bind:class="classObject">Text</p>
+    <p v-bind:style="styleObject">Text</p>
+  </div>
+  <!-- SVGのデータバインディング -->
+  <div id="svg">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <circle cx="100" cy="75" v-bind:r="radius" fill="lightpink"/>
+    </svg>
+    <input type="range" min="0" max="100" v-model="radius">
+  </div>
+  <!-- v-else-if およびv-elseによるグループ化 -->
+  <div id="elsif">
+    <div v-if="type === 'A'">
+      type is A
+    </div>
+    <div v-else-if="type === 'B'">
+      type is B
+    </div>
+    <div v-else>
+      if is none
+    </div>
+  </div>
+  <!-- 要素を繰り返し描画する,外部からデータを取得する -->
+  <div id="repeat">
+    名前 <input v-model="name">
+    <button v-on:click="doAdd">モンスターを追加</button>
+    <ul>
+      <li v-for="(item, index) in list" v-bind:key="item.id" v-if="item.hp">
+        ID.{{item.id}} {{item.name}} HP.{{item.hp}}
+        <span v-if="item.hp > 300">つよい！！</span>
+        <span v-if="item.hp < 50">ひんし</span>
+        <button v-on:click="doAttack(index)">攻撃する</button>
+        <button v-on:click="doRemove(index)">モンスターを削除</button>
+      </li>
+    </ul>
+    <span v-for="item in list">{{ item }}</span>
+    <br>
+    <span v-for="item in 15">{{ item }}</span>
+    <br>
+    <span v-for="item in text">{{ item }}</span>
+  </div>
+  <!-- テンプレート制御ディレクティブ v-cloak -->
+  <div id="cloak" v-cloak>
+    {{ message }}
+  </div>
+
+  <!-- ーーーーーーーーーーーーーーーCH3 イベントとフォーム入力の受け取りーーーーーーーーーーーーーーー -->
+  <!-- メソッドイベントハンドラ -->
+  <div id="button">
+    <button v-on:click="handleClick">クリック</button>
+  </div>
+  <!-- フォーム入力の取得 -->
+  <div id="form">
+    <input v-bind:value="message" v-on:change="handleInput">
+  </div>
+  <!-- イベント修飾子 -->
+  <div id="event">
+    <div v-on:click.right="handler">example右クリック有効</div>
+    <!-- 右ボタンを押した時のコンテキストメニューを表示させない -->
+    <div v-on:click.right.prevent="handler">example右クリック無効</div>
+    <!-- .stop -->
+    <div v-on:click="handler('div1')">
+      div1
+      <a href="#top" v-on:click.stop="handler('div2')">div2</a>
+    </div>
+    <!-- .prevent -->
+    <div v-on:click="handler('div1')">
+      div1
+      <a href="#top" v-on:click.prevent="handler('div2')">div2</a>
+    </div>
+    <!-- .capture -->
+    <div v-on:click.capture="handler('div1')">
+      div1
+      <div v-on:click="handler('div2')">
+        div2
+        <div v-on:click="handler('div3')">div3</div>
+      </div>
+    </div>
+    <!-- .native -->
+    <!-- コンポーネントをクリックするとハンドラが呼び出される -->
+    <!-- <my-component v-on:click.native="handler">a</my-component> -->
+    <!-- コンポーネントをクリックしてもハンドラは呼び出されない -->
+    <!-- <my-component v-on:click="handler"></my-component> -->
+  </div>
+    <!-- フォーム入力バインディング -->
+  <div id="tex">
+    <input v-model="message">
+    <p>{{ message }}</p>
+    <!-- 複数行テキスト -->
+    <textarea v-model="message"></textarea>
+    <pre>{{ message }}</pre>
+    <!-- チェックボックス -->
+    <!-- 単一要素 -->
+    <label>
+      <input type="checkbox" v-model="val">{{ val }}
+    </label>
+    <br>
+    <!-- 複数要素 -->
+    <!-- チェックボックス -->
+    <label><input type="checkbox" v-model="vals" value="A">A</label>
+    <label><input type="checkbox" v-model="vals" value="B">B</label>
+    <label><input type="checkbox" v-model="vals" value="C">C</label>
+    <p>{{ vals }}</p>
+    <br>
+    <!-- ラジオボタン -->
+    <label><input type="radio" v-model="vales" value="a">A</label>
+    <label><input type="radio" v-model="vales" value="b">B</label>
+    <label><input type="radio" v-model="vales" value="c">C</label>
+    <p>{{ vales }}</p>
+    <!-- セレクトボックス -->
+    <select v-model="select">
+      <option disabled="disabled">選択してください</option>
+      <option value="a">A</option>
+      <option value="b">B</option>
+      <option value="c">C</option>
+    </select>
+    <!-- 複数選択セレクトボックス -->
+    <select v-model="selects" multiple>
+      <option disabled="disabled">選択してください</option>
+      <option value="a">A</option>
+      <option value="b">B</option>
+      <option value="c">C</option>
+    </select>
+    <p>{{ selects }}</p>
+    <!-- 画像ファイル プレビュー機能付き-->
+    <input type="file" v-on:change="handleChange">
+    <div v-if="preview"><img v-bind:src="preview" class="preview"></div>
+    <input type="range" v-model.number="num"> {{ num }}
+  </div>
+
+  <div id="scroll">
+    <header v-bind:class="{ compact: scrollY > 200 }">
+      200pxより下にスクロールしたら.compactを付与
+    </header>
+  </div>
+  <!-- スムーススクロールの実装 -->
+  <script src="https://cdn.jsdelivr.net/npm/smooth-scroll@12.1.5"></script>
+  <div id="smooth">
+    <div class="content">...</div>
+    <div v-on:click="scrollTop">
+      ページ上部へ移動
+    </div>
+  </div>
+  <!-- ーーーーーーーーーーーーーーーCH4 データの監視と加工ーーーーーーーーーーーーーーー -->
+  <div id="math">
+    <!-- 算出プロパティの使い方 -->
+    <p>{{ width }} の半分は {{ halfWidth }}</p>
+    <!-- 算出プロパティを組み合わせて使用しよう -->
+    <p>X: {{ halfPoint.x }}</p>
+    <p>Y: {{ halfPoint.y }}</p>
+  </div>
+  <div id="math2">
+    <!-- ゲッターとセッター -->
+    <input v-model.number="width"> {{ width }}
+    <input v-model.number="halfWidth"> {{ halfWidth }}
+  </div>
+  <!-- 算出プロパティのキャッシュ機能 -->
+  <div id="math3">
+    <h3>算出プロパティcomputedとメソッドmethodsの違い</h3>
+    <p>算出プロパティ</p>
+    <ol>
+      <li>{{ computedData }}</li>
+      <li>{{ computedData }}</li>
+    </ol>
+    <p>メソッド</p>
+    <ol>
+      <li>{{ methodsData() }}</li>
+      <li>{{ methodsData() }}</li>
+    </ol>
+  </div>
+  <!-- リストの絞り込みに利用しよう -->
+  <!-- ソート機能を追加しよう -->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js"></script>
+  <div id="search">
+    <input v-model.number="budget">円以下に絞り込む
+    <input v-model.number="limit">件を表示
+    <button v-on:click="order=!order">切り替え</button>
+    <p>{{ matched.length }}件中{{ limited.length }}件を表示中</p>
+    <ul>
+       <!-- v-forでは最終結果、算出プロパティのlimitedを使用する -->
+      <li v-for="item in limited" v-bind:key="item.id">
+        {{ item.name }} {{ item.price }}円
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@0.17.1/dist/axios.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
