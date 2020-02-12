@@ -245,6 +245,29 @@
       </li>
     </ul>
   </div>
+  <!-- ウォッチャでデータを監視して処理を自動化 -->
+  <!-- フォームを監視してAPIからデータを取得しよう -->
+  <div id="api">
+    <h3>Github repository list search</h3>
+    <select v-model="current">
+      <option v-for="topic in topics" v-bind:value="topic.value">
+        {{ topic.name }}
+      </option>
+    </select>
+    <div v-for="item in list">{{ item.full_name }}</div>
+  </div>
+  <!-- フィルタでテキストの変換処理を行う -->
+  <!-- フィルタの使い方 -->
+  <div id="fillter">
+    <p>{{ price | localeNum }}円</p>
+    <!-- 複数のフィルタをつなげて使用する -->
+    <p>180 度は {{ 180 | radian | round }} ラジアンだよ</p>
+  </div>
+  <!-- CH5 コンポーネントで UI 部品を作る -->
+  <!-- コンポーネントの登録 -->
+  <div id="component">
+    <my-component></my-component>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios@0.17.1/dist/axios.min.js"></script>
   <script src="main.js"></script>

@@ -351,3 +351,61 @@ new Vue({
     }
   }
 })
+
+// ウォッチャでデータを監視して処理を自動化
+// フォームを監視してAPIからデータを取得しよう
+new Vue({
+  el: '#api',
+  data: {
+    list: [],
+    current: '',
+    topics: [
+      { value: 'vue', name: 'Vue.js' },
+      { value: 'jQuery', name: 'jQuery' }
+    ]
+  },
+  watch: {
+    current: function (val) {
+      // GitHubのAPIからトピックのリポジトリを検索
+      axios.get('https://api.github.com/search/repositories', {
+        params: {
+          q: 'topic:' + val
+        }
+      }).then(function (response) {
+        this.list = response.data.items
+      }.bind(this))
+    }
+  },
+})
+
+// フィルタでテキストの変換処理を行う
+// フィルタの使い方
+new Vue({
+  el: '#fillter',
+  data: {
+    price: 19800
+  },
+  filters: {
+    localeNum: function(val) {
+      return val.toLocaleString()
+    },
+    round: function(val) {
+      return Math.round(val * 100) / 100
+    },
+    radian: function(val) {
+      return val * Math.PI / 180
+    }
+  }
+})
+
+// CH5 コンポーネントで UI 部品を作る
+// コンポーネントの登録
+var myComponent = {
+  template: '<p>MyComponent</p>'
+}
+new Vue({
+  el: '#component',
+  components: {
+    'my-component': myComponent
+  }
+})
