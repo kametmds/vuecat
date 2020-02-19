@@ -398,14 +398,171 @@ new Vue({
   }
 })
 
-// CH5 コンポーネントで UI 部品を作る
+// -----------------------CH5 コンポーネントで UI 部品を作る---------------------------
 // コンポーネントの登録
-var myComponent = {
+// コンポーネントの定義
+Vue.component('my-component', {
   template: '<p>MyComponent</p>'
+})
+
+new Vue({
+  el: '#component'
+})
+// コンポーネントのローカル登録
+var myComponent = {
+  template: '<p>MyComponent Locel</p>'
 }
 new Vue({
-  el: '#component',
+  el: '#component2',
   components: {
+    // my-componentがローカルとして登録されそのコンポーネントのスコープ内だけで使用する様に制限できる。
+    // 左辺はケバブケース推奨
     'my-component': myComponent
+  }
+})
+
+// コンポーネントのオプション
+Vue.component('component-option', {
+  template: '<p>{{ message }}</p>',
+  // ルートコンストラクタのデータオプションと違い
+  // コンポーネントのデータはオブジェクトを返す関数でなければいけない
+  data: function() {
+    return {
+      message: 'Hello Vue.js'
+    }
+  },
+  methods: {
+    // メソッドや算出プロパティ、ウォッチャなどの定義方法は
+    // ルートコンストラクタのオプションと同じ
+  }
+})
+Vue.component('multiple', {
+  template: '<div><span>複数の要素がある場合は</span><span>、全体を何らかの要素で囲む</span></div>'
+})
+new Vue({
+  el: '#component3'
+})
+// コンポーネント間の通信 / 親から子
+Vue.component('comp-child', {
+  //テンプレートで受け取ったvalを使用
+  template: '<p>{{ val }}</p>',
+  //受け取る属性名を指定
+  props: ['val']
+})
+new Vue({
+  el: '#comp-parent',
+  data: {
+    valueA: 'これはデータとしての子A',
+    valueB: 'これはデータとしての子B'
+  }
+})
+
+// コンポーネントをリストレンダリング
+Vue.component('list-render', {
+  template: '<li>{{ name }} HP. {{ hp }}</li>',
+  props: ['name','hp']
+})
+new Vue({
+  el: '#component4',
+  data: {
+    list: [
+      { id: 1, name: 'スライム', hp: 100 },
+      { id: 2, name: 'ゴブリン', hp: 200 },
+      { id: 3, name: 'ドラゴン', hp: 500 }
+    ]
+  }
+})
+
+// コンポーネント間の通信 / 子から親
+// 子のイベントを親にキャッチさせる
+Vue.component('comp-child', {
+  template: '<button v-on:click="handleClick">イベント発火</button>',
+  methods: {
+    // ボタンのクリックイベントのハンドラでchilds-eventを発火する
+    handleClick: function () {
+      this.$emit('childs-event')
+    }
+  }
+})
+
+new Vue({
+  el: '#component5',
+  methods: {
+    parentsMethod: function () {
+      alert('イベントをキャッチ！')
+    }
+  }
+})
+
+// 親が持つデータを操作しよう
+Vue.component('comp-child', {
+  template: '<li>{{ name }} HP.{{ hp }}\
+  <button v-on:click="doAttack">攻撃する</button></li>',
+  props: {
+    id: Number,
+    name: String,
+    hp: Number
+  },
+  methods: {
+    // ボタンのクリックイベントのハンドラから$emitでattackを発火する
+    doAttack: function () {
+      // 引数として自分のIDを渡す
+      this.$emit('attack', this.id)
+    }
+  }
+})
+
+new Vue({
+  el: '#component6',
+  data: {
+    list: [
+      { id: 1, name: 'スライム', hp: 100 },
+      { id: 2, name: 'ゴブリン', hp: 200 },
+      { id: 3, name: 'ドラゴン', hp: 500 }
+    ]
+  },
+  methods: {
+    // attackが発火
+    handleAttack: function (id) {
+      // 引数のIDから要素を検索
+      var item = this.list.find(function (el) {
+        return el.id === id
+      })
+      if (item !== undefined && item.hp > 0) item.hp -= 10
+    }
+  }
+})
+
+// コンポーネント間の通信 / 非親子
+//イベントバス用インスタンスを作成
+var bus = new Vue({
+  data: {
+    count: 0
+  }
+})
+
+Vue.component('component-b', {
+  template: '<p>bus: {{ bus.count }}</p>',
+  computed: {
+    // busのデータを算出プロパティに使用
+    bus: function () {
+      return bus.$data
+    }
+  },
+  created: function () {
+    bus.$on('bus-event', function () {
+      this.count++
+    })
+  }
+})
+
+// スロットを使ったコンポーネントのカスタマイズ
+
+// -----------------------CH6 トランジションとアニメーション-----------------------
+// 基本的なトランジションの使い方
+new Vue({
+  el: '#tran',
+  data: {
+    show: true
   }
 })

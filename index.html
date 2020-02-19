@@ -264,10 +264,76 @@
     <p>180 度は {{ 180 | radian | round }} ラジアンだよ</p>
   </div>
   <!-- CH5 コンポーネントで UI 部品を作る -->
+  <h3>コンポーネントでUI部品を作る</h3>
   <!-- コンポーネントの登録 -->
   <div id="component">
+    <!-- 自分で作ったコンポーネントタグを用いる -->
     <my-component></my-component>
   </div>
+  <!-- コンポーネントのローカル登録 -->
+  <div id="component2">
+    <!-- 自分で作ったコンポーネントタグを用いる -->
+    <my-component></my-component>
+  </div>
+  <!-- コンポーネントのオプション-->
+  <div id="component3">
+    <component-option></component-option>
+    <!-- 複数の要素 -->
+    <multiple></multiple>
+    <!-- 下の二つはmyーcomponentから作られた、別々のインスタンスとして扱われる -->
+    <my-component></my-component>
+    <my-component></my-component>
+  </div>
+
+  <!-- コンポーネント間の通信 / 親から子 -->
+  <div id="comp-parent">
+    <!-- インスタンスごとに別々のテキストを表示 -->
+    <!-- プロパティとして文字列を渡す -->
+    <!-- valという属性で単純な文字列を持たせた -->
+    <comp-child val="これは子A"></comp-child>
+    <comp-child val="これは子B"></comp-child>
+    <!-- プロパティとしてデータを渡すs -->
+    <comp-child :val="valueA"></comp-child>
+    <comp-child :val="valueB"></comp-child>
+  </div>
+  <!-- コンポーネントをリストレンダリング -->
+  <div id="component4">
+    <ul>
+      <!-- コンポーネントに対してv-forディレクティブを使用することも可能 -->
+      <list-render v-for="item in list"
+        v-bind:key="item.id"
+        v-bind:name="item.name"
+        v-bind:hp="item.hp"></list-render>
+    </ul>
+  </div>
+
+  <!-- // コンポーネント間の通信 / 子から親 -->
+  <div id="component5">
+    <!-- 子のイベントを親にキャッチさせる -->
+    <comp-child v-on:childs-event="parentsMethod"></comp-child>
+  </div>
+  <!-- 親が持つデータを操作しよう -->
+  <div id="component6">
+    <ul>
+      <comp-child v-for="item in list"
+        v-bind:key="item.id"
+        v-bind="item"
+        v-on:attack="handleAttack"></comp-child>
+    </ul>
+  </div>
+
+  <!-- スロットを使ったコンポーネントのカスタマイズ -->
+  <!-- CH6 トランジションとアニメーション -->
+  <!-- 基本的なトランジションの使い方 -->
+  <div id="tran">
+    <p><button v-on:click="show=!show">切り替え</button></p>
+    <!-- appearをつけると初期描画時にもトランシジョンを行う -->
+    <!-- name属性でv-プレフィックスを変更できる -->
+    <transition appear name="demo">
+      <div v-show="show">トランシジョンさせたい要素</div>
+    </transition>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios@0.17.1/dist/axios.min.js"></script>
   <script src="main.js"></script>

@@ -61,3 +61,18 @@ button {
   width: 200px;
   height: auto;
 }
+
+/* トランシジョンタグにname属性でdemoをつけると
+クラスのプレフィックスが[demo-]になる
+<transition name="demo">
+  <div v-show="show">トランシジョンさせたい要素</div>
+</transition> */
+
+/* 1秒かけて透明度を遷移 */
+.demo-enter-active, .demo-leave-active {
+  transition: opacity 1s;
+}
+/* 見えなくなるときの透明度 */
+.demo-enter, .demo-leave-to {
+  opacity: 0;
+}
